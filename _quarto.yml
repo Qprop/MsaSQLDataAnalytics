@@ -1,0 +1,6 @@
+project:
+  title: "MsaSQLDataAnalytics"
+  type: website
+  output-dir: docs
+editor: visual
+

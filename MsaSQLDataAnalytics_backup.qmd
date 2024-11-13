@@ -1,0 +1,513 @@
+---
+title: "Data Analytics Introduction Using SQL Training"
+jupyter: python3
+format: 
+  revealjs:
+    theme: serif
+    smaller: true
+    scrollable: true
+    incremental: false
+    transition: concave
+    background-transition: fade
+    controls: true
+    code-fold: true
+    code-tools: true
+---
+
+# Introduction
+
+SQL or Structured Query Language lets you do this in a very efficient way. SQL not only enables you to you ask meaningful questions to the data but also allows you to you play with the data in many different ways. Without databases, practically no real-world application is possible. So, the knowledge of databases and being able to handle them are crucial parts of a data scientist's toolbox.
+
+**SQL** is also called ***SE-QU-EL***.
+
+SQL relies on relational nature or tables. Tables (datasets with rows and columns) in SQL can be equated dataframes in **Python** and tables in **Excel**
+
+## Relationship Database Management System (RDBMS)
+
+To be able to fully appreciate the use of databases and the relational nature, we access this through **RDBMS**. There are numerous RDBMS just to mention but a few;
+
+-   MS SQL
+-   MySQL
+-   PostgreSQL
+-   SQLite
+-   e.t.c.
+
+## SQL CRUD (**C**reate **R**ead **U**pdate **D**elete)
+
+**SQL** main ideology is to be able to:
+- ***Create*** tables/Databases
+- **Read** tables/Databases
+- **Update** tables/Databases
+- **Delete** tables/Databases
+
+
+***Create***
+
+```{sql}
+
+CREATE TABLE table_name (
+ column_name TYPE column_constraint,
+ table_constraint table_constraint
+)
+
+
+```
+
+***Insert***
+
+Inserting records into a table
+
+```{sql}
+
+INSERT INTO table(column1, column2, …)
+VALUES
+ (value1, value2, …);
+
+
+```
+
+***Update***
+
+Updating a record in the table -
+The general structure of an update query in SQL looks like the following:
+
+```{sql}
+
+UPDATE table
+SET column1 = value1,
+    column2 = value2 ,...
+WHERE
+ condition;
+
+
+```
+
+
+***Delete***
+
+Deleting a record in the table -
+The general structure of a delete query in SQL looks like following:
+
+```{sql}
+
+DELETE FROM table
+WHERE condition;
+
+
+```
+
+
+***Sample Create***
+
+```{sql}
+
+CREATE TABLE cars (
+
+"make" varchar(255),
+"model" varchar(255),
+"year" numeric(4,0),
+"propulsion_type" varchar(255),
+"time_to_60_mph_s" numeric(4,2),
+"limited_production_count" numeric(10,0)
+
+
+);
+
+
+```
+
+
+## First SQL syntax
+
+**SELECT**
+
+Pick all the columns
+
+```{sql}
+
+SELECT *
+	FROM cars
+
+
+```
+
+Select one single column
+
+```{sql}
+
+SELECT model
+	FROM cars
+	
+```
+
+select multiple columns
+
+```{sql}
+
+SELECT make, model
+	FROM cars
+	
+```
+
+
+Override column names with SELECT col AS new_name
+
+```{sql}
+
+SELECT make, model, propulsion_type AS engine_type
+	FROM cars
+	
+```
+
+Arrange the rows in ascending order of values in a column with ORDER BY col
+
+```{sql}
+
+SELECT  make, model, time_to_60_mph_s
+	FROM cars
+	ORDER BY time_to_60_mph_s
+	
+```
+
+Limit the number of rows returned with LIMIT n
+
+```{sql}
+
+SELECT * 
+	FROM cars
+LIMIT 2
+
+```
+
+
+Get unique values with SELECT DISTINCT
+
+```{sql}
+
+SELECT DISTINCT propulsion_type
+	FROM cars
+
+
+```
+
+-----
+
+## Filtering Data
+
+Get rows where a number is greater than a value with WHERE col \> n
+
+```{sql}
+
+SELECT make, model, time_to_60_mph_s
+	FROM cars
+	WHERE time_to_60_mph_s > 2.1
+
+```
+
+Get rows where a number is greater than or equal to a value with WHERE col \>= n
+
+```{sql}
+
+SELECT make, model, time_to_60_mph_s
+	FROM cars
+	WHERE time_to_60_mph_s >= 2.1
+
+
+```
+
+Get rows where a number is less than a value with WHERE col \< n
+
+```{sql}
+
+SELECT make, model, time_to_60_mph_s
+	FROM cars
+	WHERE time_to_60_mph_s < 2.1
+
+
+```
+
+Get rows where a number is less than or equal to a value with WHERE col \<= n
+
+```{sql}
+
+SELECT make, model, time_to_60_mph_s
+	FROM cars
+	WHERE time_to_60_mph_s <= 2.1
+
+
+```
+
+Get rows where a number is equal to a value with WHERE col = n
+
+```{sql}
+
+SELECT make, model, time_to_60_mph_s
+	FROM cars
+	WHERE time_to_60_mph_s = 2.1
+
+
+```
+
+Get rows where a number is not equal to a value with WHERE col \<\> n or WHERE col != n
+
+```{sql}
+
+SELECT make, model, time_to_60_mph_s
+	FROM cars
+	WHERE time_to_60_mph_s <> 2.1
+
+
+
+```
+
+Get rows where a number is between two values (inclusive) with WHERE col BETWEEN m AND n
+
+```{sql}
+
+SELECT make, model, time_to_60_mph_s
+	FROM cars
+	WHERE time_to_60_mph_s BETWEEN 1.9 AND 2.1
+	
+
+```
+
+-----
+
+
+**Filtering on text columns**
+
+Get rows where text is equal to a value with WHERE col = 'x'
+
+```{sql}
+
+SELECT make, model, propulsion_type
+	FROM cars
+	WHERE propulsion_type = 'Hybrid'
+
+
+```
+
+Get rows where text is one of several values with WHERE col IN ('x', 'y')
+
+```{sql}
+
+SELECT make, model, propulsion_type
+	FROM cars
+	WHERE propulsion_type IN ('Electric',  'Hybrid')
+
+
+```
+
+
+Get rows where text contains specific letters with WHERE col LIKE '%abc%' (% represents any characters)
+
+```{sql}
+
+SELECT make, model, propulsion_type
+	FROM cars
+	WHERE propulsion_type LIKE '%ic%'
+
+```
+
+For case insensitive matching, use WHERE col ILIKE '%abc%'
+
+
+```{sql}
+
+SELECT make, model, propulsion_type
+	FROM cars
+	WHERE propulsion_type ILIKE '%ic%'
+
+```
+
+------
+
+**Filtering on multiple columns**
+
+
+Get the rows where one condition and another condition holds with WHERE condn1 AND condn2
+
+```{sql}
+
+SELECT make, model, propulsion_type, model_year
+	FROM cars
+	WHERE propulsion_type = 'Hybrid'
+		AND model_year < 2020
+
+```
+
+Get the rows where one condition or another condition holds with WHERE condn1 OR condn2
+
+```{sql}
+
+SELECT make, model, propulsion_type, model_year
+	FROM cars
+	WHERE propulsion_type = 'Hybrid'
+		OR model_year < 2020
+
+```
+
+**Filtering on missing data**
+
+Get rows where values are missing with WHERE col IS NULL
+
+```{sql}
+
+SELECT make, model, limited_production_count
+	FROM cars
+	WHERE limited_production_count IS NULL
+	
+```
+
+Get rows where values are not missing with WHERE col IS NOT NULL
+
+```{sql}
+
+SELECT make, model, limited_production_count
+	FROM cars
+	WHERE limited_production_count IS NOT NULL
+
+```
+
+
+## Aggregating Data
+
+**Simple aggregations**
+
+Get the total number of rows SELECT COUNT(*)
+
+```{sql}
+
+SELECT COUNT(*)
+	FROM cars
+
+```
+ 
+Get the total value of a column with SELECT SUM(col)
+
+```{sql}
+
+SELECT SUM(limited_production_count)
+	FROM cars
+
+```
+
+Get the mean value of a column with SELECT AVG(col)
+
+```{sql}
+
+SELECT AVG(time_to_60_mph_s)
+	FROM cars
+
+```
+
+Get the minimum value of a column with SELECT MIN(col)
+
+```{sql}
+
+SELECT MIN(time_to_60_mph_s)
+	FROM cars
+
+```
+
+Get the maximum value of a column with SELECT MAX(col)
+
+```{sql}
+
+SELECT MAX(time_to_60_mph_s)
+	FROM cars
+	
+```
+
+## Grouping, filtering, and sorting
+
+Get summaries grouped by values with GROUP BY col
+
+```{sql}
+
+SELECT propulsion_type, COUNT(*)
+	FROM cars
+	GROUP BY propulsion_type
+
+```
+
+Get summaries grouped by values, in order of summaries with GROUP BY col ORDER BY smmry
+
+
+```{sql}
+
+SELECT propulsion_type, AVG(time_to_60_mph_s) AS mean_time_to_60_mph_s
+	FROM cars
+	GROUP BY propulsion_type
+	ORDER BY mean_time_to_60_mph_s
+
+```
+
+Get rows where values in a group meet a criterion with GROUP BY col HAVING condn
+
+```{sql}
+
+SELECT propulsion_type, AVG(time_to_60_mph_s) AS mean_time_to_60_mph_s
+	FROM cars
+	GROUP BY propulsion_type
+	HAVING mean_time_to_60_mph_s > 2
+
+```
+
+Filter before and after grouping with WHERE condn_before GROUP BY col HAVING condn_after
+
+```{sql}
+
+SELECT propulsion_type, AVG(time_to_60_mph_s) AS mean_time_to_60_mph_s
+	FROM cars
+WHERE limited_production_count IS NOT NULL
+	GROUP BY propulsion_type
+	HAVING mean_time_to_60_mph_s > 2
+	
+```
+
+## PostgreSQL-Specific Syntax
+
+
+Not all code works in every dialect of SQL. The following examples work in PostgreSQL, but are not guaranteed to work in other dialects.
+
+Limit the number of rows returned, offset from the top with LIMIT m OFFSET n
+
+```{sql}
+
+SELECT *
+	FROM cars
+LIMIT 2 OFFSET 3
+
+```
+
+PostgreSQL allows text concatenation with the || operator
+
+```{sql}
+
+SELECT make || ' ' || model AS make_and_model
+ 	FROM cars
+ 	
+``` 	
+ 
+Get the current date with CURRENT_DATE and the current datetime with NOW() or CURRENT_TIME
+
+```{sql}
+
+SELECT NOW(), CURRENT_DATE, CURRENT_TIME
+
+```
+
+List available tables by selecting from pg_catalog.pg_tables
+
+```{sql}
+
+SELECT * FROM pg_catalog.pg_tables
+
+```
+
+## Folder Structure & File Management {visibility="hidden"}
+
+# SQL {visibility="hidden"}
+
+## SQL Introduction {.smaller} {visibility="hidden"}

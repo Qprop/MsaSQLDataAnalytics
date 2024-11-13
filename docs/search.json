@@ -1,0 +1,100 @@
+[
+  {
+    "objectID": "MsaSQLDataAnalytics.html#relationship-database-management-system-rdbms",
+    "href": "MsaSQLDataAnalytics.html#relationship-database-management-system-rdbms",
+    "title": "Data Analytics Introduction Using SQL Training",
+    "section": "Relationship Database Management System (RDBMS)",
+    "text": "Relationship Database Management System (RDBMS)\nTo be able to fully appreciate the use of databases and the relational nature, we access this through RDBMS. There are numerous RDBMS just to mention but a few;\n\nMS SQL\nMySQL\nPostgreSQL\nSQLite\ne.t.c."
+  },
+  {
+    "objectID": "MsaSQLDataAnalytics.html#sql-crud-create-read-update-delete",
+    "href": "MsaSQLDataAnalytics.html#sql-crud-create-read-update-delete",
+    "title": "Data Analytics Introduction Using SQL Training",
+    "section": "SQL CRUD (Create Read Update Delete)",
+    "text": "SQL CRUD (Create Read Update Delete)\nSQL main ideology is to be able to: - Create tables/Databases - Read tables/Databases - Update tables/Databases - Delete tables/Databases\nCreate\n\nCREATE TABLE table_name (\n column_name TYPE column_constraint,\n table_constraint table_constraint\n)\n\nInsert\nInserting records into a table\n\nINSERT INTO table(column1, column2, …)\nVALUES\n (value1, value2, …);\n\nUpdate\nUpdating a record in the table - The general structure of an update query in SQL looks like the following:\n\nUPDATE table\nSET column1 = value1,\n    column2 = value2 ,...\nWHERE\n condition;\n\nDelete\nDeleting a record in the table - The general structure of a delete query in SQL looks like following:\n\nDELETE FROM table\nWHERE condition;\n\nSample Create\n\nCREATE TABLE cars (\n\n\"make\" varchar(255),\n\"model\" varchar(255),\n\"year\" numeric(4,0),\n\"propulsion_type\" varchar(255),\n\"time_to_60_mph_s\" numeric(4,2),\n\"limited_production_count\" numeric(10,0)\n\n\n);"
+  },
+  {
+    "objectID": "MsaSQLDataAnalytics.html#first-sql-syntax",
+    "href": "MsaSQLDataAnalytics.html#first-sql-syntax",
+    "title": "Data Analytics Introduction Using SQL Training",
+    "section": "First SQL syntax",
+    "text": "First SQL syntax\nSELECT\nPick all the columns\n\nSELECT *\n    FROM cars\n\nSelect one single column\n\nSELECT model\n    FROM cars\n    \nselect multiple columns\n\nSELECT make, model\n    FROM cars\n    \nOverride column names with SELECT col AS new_name\n\nSELECT make, model, propulsion_type AS engine_type\n    FROM cars\n    \nArrange the rows in ascending order of values in a column with ORDER BY col\n\nSELECT  make, model, time_to_60_mph_s\n    FROM cars\n    ORDER BY time_to_60_mph_s\n    \nLimit the number of rows returned with LIMIT n\n\nSELECT * \n    FROM cars\nLIMIT 2\nGet unique values with SELECT DISTINCT\n\nSELECT DISTINCT propulsion_type\n    FROM cars"
+  },
+  {
+    "objectID": "MsaSQLDataAnalytics.html#filtering-data",
+    "href": "MsaSQLDataAnalytics.html#filtering-data",
+    "title": "Data Analytics Introduction Using SQL Training",
+    "section": "Filtering Data",
+    "text": "Filtering Data\nGet rows where a number is greater than a value with WHERE col &gt; n\n\nSELECT make, model, time_to_60_mph_s\n    FROM cars\n    WHERE time_to_60_mph_s &gt; 2.1\nGet rows where a number is greater than or equal to a value with WHERE col &gt;= n\n\nSELECT make, model, time_to_60_mph_s\n    FROM cars\n    WHERE time_to_60_mph_s &gt;= 2.1\n\nGet rows where a number is less than a value with WHERE col &lt; n\n\nSELECT make, model, time_to_60_mph_s\n    FROM cars\n    WHERE time_to_60_mph_s &lt; 2.1\n\nGet rows where a number is less than or equal to a value with WHERE col &lt;= n\n\nSELECT make, model, time_to_60_mph_s\n    FROM cars\n    WHERE time_to_60_mph_s &lt;= 2.1\n\nGet rows where a number is equal to a value with WHERE col = n\n\nSELECT make, model, time_to_60_mph_s\n    FROM cars\n    WHERE time_to_60_mph_s = 2.1\n\nGet rows where a number is not equal to a value with WHERE col &lt;&gt; n or WHERE col != n\n\nSELECT make, model, time_to_60_mph_s\n    FROM cars\n    WHERE time_to_60_mph_s &lt;&gt; 2.1\n\n\nGet rows where a number is between two values (inclusive) with WHERE col BETWEEN m AND n\n\nSELECT make, model, time_to_60_mph_s\n    FROM cars\n    WHERE time_to_60_mph_s BETWEEN 1.9 AND 2.1"
+  },
+  {
+    "objectID": "MsaSQLDataAnalytics.html#aggregating-data",
+    "href": "MsaSQLDataAnalytics.html#aggregating-data",
+    "title": "Data Analytics Introduction Using SQL Training",
+    "section": "Aggregating Data",
+    "text": "Aggregating Data\nSimple aggregations\nGet the total number of rows SELECT COUNT(*)\n\nSELECT COUNT(*)\n    FROM cars\nGet the total value of a column with SELECT SUM(col)\n\nSELECT SUM(limited_production_count)\n    FROM cars\nGet the mean value of a column with SELECT AVG(col)\n\nSELECT AVG(time_to_60_mph_s)\n    FROM cars\nGet the minimum value of a column with SELECT MIN(col)\n\nSELECT MIN(time_to_60_mph_s)\n    FROM cars\nGet the maximum value of a column with SELECT MAX(col)\n\nSELECT MAX(time_to_60_mph_s)\n    FROM cars"
+  },
+  {
+    "objectID": "MsaSQLDataAnalytics.html#grouping-filtering-and-sorting",
+    "href": "MsaSQLDataAnalytics.html#grouping-filtering-and-sorting",
+    "title": "Data Analytics Introduction Using SQL Training",
+    "section": "Grouping, filtering, and sorting",
+    "text": "Grouping, filtering, and sorting\nGet summaries grouped by values with GROUP BY col\n\nSELECT propulsion_type, COUNT(*)\n    FROM cars\n    GROUP BY propulsion_type\nGet summaries grouped by values, in order of summaries with GROUP BY col ORDER BY smmry\n\nSELECT propulsion_type, AVG(time_to_60_mph_s) AS mean_time_to_60_mph_s\n    FROM cars\n    GROUP BY propulsion_type\n    ORDER BY mean_time_to_60_mph_s\nGet rows where values in a group meet a criterion with GROUP BY col HAVING condn\n\nSELECT propulsion_type, AVG(time_to_60_mph_s) AS mean_time_to_60_mph_s\n    FROM cars\n    GROUP BY propulsion_type\n    HAVING mean_time_to_60_mph_s &gt; 2\nFilter before and after grouping with WHERE condn_before GROUP BY col HAVING condn_after\n\nSELECT propulsion_type, AVG(time_to_60_mph_s) AS mean_time_to_60_mph_s\n    FROM cars\nWHERE limited_production_count IS NOT NULL\n    GROUP BY propulsion_type\n    HAVING mean_time_to_60_mph_s &gt; 2"
+  },
+  {
+    "objectID": "MsaSQLDataAnalytics.html#postgresql-specific-syntax",
+    "href": "MsaSQLDataAnalytics.html#postgresql-specific-syntax",
+    "title": "Data Analytics Introduction Using SQL Training",
+    "section": "PostgreSQL-Specific Syntax",
+    "text": "PostgreSQL-Specific Syntax\nNot all code works in every dialect of SQL. The following examples work in PostgreSQL, but are not guaranteed to work in other dialects.\nLimit the number of rows returned, offset from the top with LIMIT m OFFSET n\n\nSELECT *\n    FROM cars\nLIMIT 2 OFFSET 3\nPostgreSQL allows text concatenation with the || operator\n\nSELECT make || ' ' || model AS make_and_model\n    FROM cars\n    \nGet the current date with CURRENT_DATE and the current datetime with NOW() or CURRENT_TIME\n\nSELECT NOW(), CURRENT_DATE, CURRENT_TIME\nList available tables by selecting from pg_catalog.pg_tables\n\nSELECT * FROM pg_catalog.pg_tables"
+  },
+  {
+    "objectID": "MsaSQLDataAnalytics_backup.html#relationship-database-management-system-rdbms",
+    "href": "MsaSQLDataAnalytics_backup.html#relationship-database-management-system-rdbms",
+    "title": "Data Analytics Introduction Using SQL Training",
+    "section": "Relationship Database Management System (RDBMS)",
+    "text": "Relationship Database Management System (RDBMS)\nTo be able to fully appreciate the use of databases and the relational nature, we access this through RDBMS. There are numerous RDBMS just to mention but a few;\n\nMS SQL\nMySQL\nPostgreSQL\nSQLite\ne.t.c."
+  },
+  {
+    "objectID": "MsaSQLDataAnalytics_backup.html#sql-crud-create-read-update-delete",
+    "href": "MsaSQLDataAnalytics_backup.html#sql-crud-create-read-update-delete",
+    "title": "Data Analytics Introduction Using SQL Training",
+    "section": "SQL CRUD (Create Read Update Delete)",
+    "text": "SQL CRUD (Create Read Update Delete)\nSQL main ideology is to be able to: - Create tables/Databases - Read tables/Databases - Update tables/Databases - Delete tables/Databases\nCreate\n\nCREATE TABLE table_name (\n column_name TYPE column_constraint,\n table_constraint table_constraint\n)\n\nInsert\nInserting records into a table\n\nINSERT INTO table(column1, column2, …)\nVALUES\n (value1, value2, …);\n\nUpdate\nUpdating a record in the table - The general structure of an update query in SQL looks like the following:\n\nUPDATE table\nSET column1 = value1,\n    column2 = value2 ,...\nWHERE\n condition;\n\nDelete\nDeleting a record in the table - The general structure of a delete query in SQL looks like following:\n\nDELETE FROM table\nWHERE condition;\n\nSample Create\n\nCREATE TABLE cars (\n\n\"make\" varchar(255),\n\"model\" varchar(255),\n\"year\" numeric(4,0),\n\"propulsion_type\" varchar(255),\n\"time_to_60_mph_s\" numeric(4,2),\n\"limited_production_count\" numeric(10,0)\n\n\n);"
+  },
+  {
+    "objectID": "MsaSQLDataAnalytics_backup.html#first-sql-syntax",
+    "href": "MsaSQLDataAnalytics_backup.html#first-sql-syntax",
+    "title": "Data Analytics Introduction Using SQL Training",
+    "section": "First SQL syntax",
+    "text": "First SQL syntax\nSELECT\nPick all the columns\n\nSELECT *\n    FROM cars\n\nSelect one single column\n\nSELECT model\n    FROM cars\n    \nselect multiple columns\n\nSELECT make, model\n    FROM cars\n    \nOverride column names with SELECT col AS new_name\n\nSELECT make, model, propulsion_type AS engine_type\n    FROM cars\n    \nArrange the rows in ascending order of values in a column with ORDER BY col\n\nSELECT  make, model, time_to_60_mph_s\n    FROM cars\n    ORDER BY time_to_60_mph_s\n    \nLimit the number of rows returned with LIMIT n\n\nSELECT * \n    FROM cars\nLIMIT 2\nGet unique values with SELECT DISTINCT\n\nSELECT DISTINCT propulsion_type\n    FROM cars"
+  },
+  {
+    "objectID": "MsaSQLDataAnalytics_backup.html#filtering-data",
+    "href": "MsaSQLDataAnalytics_backup.html#filtering-data",
+    "title": "Data Analytics Introduction Using SQL Training",
+    "section": "Filtering Data",
+    "text": "Filtering Data\nGet rows where a number is greater than a value with WHERE col &gt; n\n\nSELECT make, model, time_to_60_mph_s\n    FROM cars\n    WHERE time_to_60_mph_s &gt; 2.1\nGet rows where a number is greater than or equal to a value with WHERE col &gt;= n\n\nSELECT make, model, time_to_60_mph_s\n    FROM cars\n    WHERE time_to_60_mph_s &gt;= 2.1\n\nGet rows where a number is less than a value with WHERE col &lt; n\n\nSELECT make, model, time_to_60_mph_s\n    FROM cars\n    WHERE time_to_60_mph_s &lt; 2.1\n\nGet rows where a number is less than or equal to a value with WHERE col &lt;= n\n\nSELECT make, model, time_to_60_mph_s\n    FROM cars\n    WHERE time_to_60_mph_s &lt;= 2.1\n\nGet rows where a number is equal to a value with WHERE col = n\n\nSELECT make, model, time_to_60_mph_s\n    FROM cars\n    WHERE time_to_60_mph_s = 2.1\n\nGet rows where a number is not equal to a value with WHERE col &lt;&gt; n or WHERE col != n\n\nSELECT make, model, time_to_60_mph_s\n    FROM cars\n    WHERE time_to_60_mph_s &lt;&gt; 2.1\n\n\nGet rows where a number is between two values (inclusive) with WHERE col BETWEEN m AND n\n\nSELECT make, model, time_to_60_mph_s\n    FROM cars\n    WHERE time_to_60_mph_s BETWEEN 1.9 AND 2.1"
+  },
+  {
+    "objectID": "MsaSQLDataAnalytics_backup.html#aggregating-data",
+    "href": "MsaSQLDataAnalytics_backup.html#aggregating-data",
+    "title": "Data Analytics Introduction Using SQL Training",
+    "section": "Aggregating Data",
+    "text": "Aggregating Data\nSimple aggregations\nGet the total number of rows SELECT COUNT(*)\n\nSELECT COUNT(*)\n    FROM cars\nGet the total value of a column with SELECT SUM(col)\n\nSELECT SUM(limited_production_count)\n    FROM cars\nGet the mean value of a column with SELECT AVG(col)\n\nSELECT AVG(time_to_60_mph_s)\n    FROM cars\nGet the minimum value of a column with SELECT MIN(col)\n\nSELECT MIN(time_to_60_mph_s)\n    FROM cars\nGet the maximum value of a column with SELECT MAX(col)\n\nSELECT MAX(time_to_60_mph_s)\n    FROM cars"
+  },
+  {
+    "objectID": "MsaSQLDataAnalytics_backup.html#grouping-filtering-and-sorting",
+    "href": "MsaSQLDataAnalytics_backup.html#grouping-filtering-and-sorting",
+    "title": "Data Analytics Introduction Using SQL Training",
+    "section": "Grouping, filtering, and sorting",
+    "text": "Grouping, filtering, and sorting\nGet summaries grouped by values with GROUP BY col\n\nSELECT propulsion_type, COUNT(*)\n    FROM cars\n    GROUP BY propulsion_type\nGet summaries grouped by values, in order of summaries with GROUP BY col ORDER BY smmry\n\nSELECT propulsion_type, AVG(time_to_60_mph_s) AS mean_time_to_60_mph_s\n    FROM cars\n    GROUP BY propulsion_type\n    ORDER BY mean_time_to_60_mph_s\nGet rows where values in a group meet a criterion with GROUP BY col HAVING condn\n\nSELECT propulsion_type, AVG(time_to_60_mph_s) AS mean_time_to_60_mph_s\n    FROM cars\n    GROUP BY propulsion_type\n    HAVING mean_time_to_60_mph_s &gt; 2\nFilter before and after grouping with WHERE condn_before GROUP BY col HAVING condn_after\n\nSELECT propulsion_type, AVG(time_to_60_mph_s) AS mean_time_to_60_mph_s\n    FROM cars\nWHERE limited_production_count IS NOT NULL\n    GROUP BY propulsion_type\n    HAVING mean_time_to_60_mph_s &gt; 2"
+  },
+  {
+    "objectID": "MsaSQLDataAnalytics_backup.html#postgresql-specific-syntax",
+    "href": "MsaSQLDataAnalytics_backup.html#postgresql-specific-syntax",
+    "title": "Data Analytics Introduction Using SQL Training",
+    "section": "PostgreSQL-Specific Syntax",
+    "text": "PostgreSQL-Specific Syntax\nNot all code works in every dialect of SQL. The following examples work in PostgreSQL, but are not guaranteed to work in other dialects.\nLimit the number of rows returned, offset from the top with LIMIT m OFFSET n\n\nSELECT *\n    FROM cars\nLIMIT 2 OFFSET 3\nPostgreSQL allows text concatenation with the || operator\n\nSELECT make || ' ' || model AS make_and_model\n    FROM cars\n    \nGet the current date with CURRENT_DATE and the current datetime with NOW() or CURRENT_TIME\n\nSELECT NOW(), CURRENT_DATE, CURRENT_TIME\nList available tables by selecting from pg_catalog.pg_tables\n\nSELECT * FROM pg_catalog.pg_tables"
+  }
+]
