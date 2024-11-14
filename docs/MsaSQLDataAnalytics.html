@@ -673,10 +673,324 @@
 <div class="sourceCode" id="cb40"><pre class="sourceCode numberSource {sql} number-lines code-with-copy"><code class="sourceCode"><span id="cb40-1"><a href="#cb40-1"></a></span>
 <span id="cb40-2"><a href="#cb40-2"></a>SELECT * FROM pg_catalog.pg_tables</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </section>
+<section id="sql-eda-samples" class="slide level2">
+<h2>SQL EDA Samples</h2>
+<div class="sourceCode" id="cb41"><pre class="sourceCode numberSource {sql} number-lines code-with-copy"><code class="sourceCode"><span id="cb41-1"><a href="#cb41-1"></a>-- CONVERT Syntax:</span>
+<span id="cb41-2"><a href="#cb41-2"></a>CONVERT ( data_type [ ( length ) ] , expression [ , style ] )</span>
+<span id="cb41-3"><a href="#cb41-3"></a>-- Returns expression based on data_type</span>
+<span id="cb41-4"><a href="#cb41-4"></a></span>
+<span id="cb41-5"><a href="#cb41-5"></a>-- DATEPART Syntax</span>
+<span id="cb41-6"><a href="#cb41-6"></a>DATEPART ( datepart , date )</span>
+<span id="cb41-7"><a href="#cb41-7"></a>-- Returns int</span>
+<span id="cb41-8"><a href="#cb41-8"></a></span>
+<span id="cb41-9"><a href="#cb41-9"></a>-- DATENAME Syntax</span>
+<span id="cb41-10"><a href="#cb41-10"></a>DATENAME ( datepart , date )</span>
+<span id="cb41-11"><a href="#cb41-11"></a>-- Returns nvarchar</span>
+<span id="cb41-12"><a href="#cb41-12"></a></span>
+<span id="cb41-13"><a href="#cb41-13"></a>-- DATEDIFF Syntax</span>
+<span id="cb41-14"><a href="#cb41-14"></a>DATEDIFF ( datepart , startdate , enddate )</span>
+<span id="cb41-15"><a href="#cb41-15"></a>-- Returns int; can't use datepart weekday value</span>
+<span id="cb41-16"><a href="#cb41-16"></a>-- datepart values = year, quarter, month, dayofyear, day, week, weekday, hour,</span>
+<span id="cb41-17"><a href="#cb41-17"></a>-- minute, second, microsecond, nanosecond</span>
+<span id="cb41-18"><a href="#cb41-18"></a></span>
+<span id="cb41-19"><a href="#cb41-19"></a>---Sample---</span>
+<span id="cb41-20"><a href="#cb41-20"></a>-- CONVERT</span>
+<span id="cb41-21"><a href="#cb41-21"></a>SELECT</span>
+<span id="cb41-22"><a href="#cb41-22"></a>TOP 1 PickupDate,</span>
+<span id="cb41-23"><a href="#cb41-23"></a>CONVERT (DATE, PickupDate) AS DateOnly</span>
+<span id="cb41-24"><a href="#cb41-24"></a>FROM YellowTripData</span>
+<span id="cb41-25"><a href="#cb41-25"></a></span>
+<span id="cb41-26"><a href="#cb41-26"></a></span>
+<span id="cb41-27"><a href="#cb41-27"></a>-- CAST syntax</span>
+<span id="cb41-28"><a href="#cb41-28"></a>CAST ( expression AS data_type [ ( length ) ] )</span>
+<span id="cb41-29"><a href="#cb41-29"></a>-- Returns expression based on data_type</span>
+<span id="cb41-30"><a href="#cb41-30"></a></span>
+<span id="cb41-31"><a href="#cb41-31"></a></span>
+<span id="cb41-32"><a href="#cb41-32"></a>SELECT DISTINCT</span>
+<span id="cb41-33"><a href="#cb41-33"></a>CAST(PickupDate as date),</span>
+<span id="cb41-34"><a href="#cb41-34"></a>CAST(DropOffDate as date)</span>
+<span id="cb41-35"><a href="#cb41-35"></a>FROM YellowTripData;</span>
+<span id="cb41-36"><a href="#cb41-36"></a></span>
+<span id="cb41-37"><a href="#cb41-37"></a></span>
+<span id="cb41-38"><a href="#cb41-38"></a>SELECT GETDATE()</span>
+<span id="cb41-39"><a href="#cb41-39"></a></span>
+<span id="cb41-40"><a href="#cb41-40"></a></span>
+<span id="cb41-41"><a href="#cb41-41"></a>-- Yesterday</span>
+<span id="cb41-42"><a href="#cb41-42"></a>SELECT DATEADD(d, -1, GETDATE())</span>
+<span id="cb41-43"><a href="#cb41-43"></a></span>
+<span id="cb41-44"><a href="#cb41-44"></a></span>
+<span id="cb41-45"><a href="#cb41-45"></a>-- Yesterday's Taxi Passenger Count</span>
+<span id="cb41-46"><a href="#cb41-46"></a>SELECT SUM(PassengerCount)</span>
+<span id="cb41-47"><a href="#cb41-47"></a>FROM YellowTripData</span>
+<span id="cb41-48"><a href="#cb41-48"></a>WHERE CAST(PickupDate as date) = DATEADD(d, -1, GETDATE())</span>
+<span id="cb41-49"><a href="#cb41-49"></a></span>
+<span id="cb41-50"><a href="#cb41-50"></a></span>
+<span id="cb41-51"><a href="#cb41-51"></a>SELECT DATEDIFF(day, '2/27/2019', '2/28/2019')</span>
+<span id="cb41-52"><a href="#cb41-52"></a>SELECT DATEDIFF(year, '12/31/2017', '1/1/2019')</span>
+<span id="cb41-53"><a href="#cb41-53"></a></span>
+<span id="cb41-54"><a href="#cb41-54"></a>SELECT DATEADD(DD, 30, '2020-06-21')</span>
+<span id="cb41-55"><a href="#cb41-55"></a></span>
+<span id="cb41-56"><a href="#cb41-56"></a>SELECT DATEDIFF(DD, '2020-05-22', '2020-06-21') AS Difference1,</span>
+<span id="cb41-57"><a href="#cb41-57"></a>DATEDIFF(DD, '2020-07-21', '2020-06-21') AS Difference2</span>
+<span id="cb41-58"><a href="#cb41-58"></a></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </section>
-<section>
+<section id="sql-eda-continuation" class="slide level2">
+<h2>SQL EDA CONTINUATION</h2>
+<div class="sourceCode" id="cb42"><pre class="sourceCode numberSource {sql} number-lines code-with-copy"><code class="sourceCode"><span id="cb42-1"><a href="#cb42-1"></a></span>
+<span id="cb42-2"><a href="#cb42-2"></a>--IF ELSE Equivalent</span>
+<span id="cb42-3"><a href="#cb42-3"></a></span>
+<span id="cb42-4"><a href="#cb42-4"></a>SELECT name, continent, indep_year,</span>
+<span id="cb42-5"><a href="#cb42-5"></a>  CASE WHEN indep_year &lt; 1900 THEN 'before 1900'</span>
+<span id="cb42-6"><a href="#cb42-6"></a>    WHEN indep_year &lt;= 1930 THEN 'between 1900 and 1930'</span>
+<span id="cb42-7"><a href="#cb42-7"></a>    ELSE 'after 1930' END</span>
+<span id="cb42-8"><a href="#cb42-8"></a>    AS indep_year_group</span>
+<span id="cb42-9"><a href="#cb42-9"></a>FROM states</span>
+<span id="cb42-10"><a href="#cb42-10"></a>ORDER BY indep_year_group;</span>
+<span id="cb42-11"><a href="#cb42-11"></a></span>
+<span id="cb42-12"><a href="#cb42-12"></a></span>
+<span id="cb42-13"><a href="#cb42-13"></a></span>
+<span id="cb42-14"><a href="#cb42-14"></a>SELECT DurationSeconds,</span>
+<span id="cb42-15"><a href="#cb42-15"></a>  ROUND(DurationSeconds, 0) AS RoundToZero,</span>
+<span id="cb42-16"><a href="#cb42-16"></a>  ROUND(DurationSeconds, 1) AS RoundToOne</span>
+<span id="cb42-17"><a href="#cb42-17"></a>FROM Incidents</span>
+<span id="cb42-18"><a href="#cb42-18"></a></span>
+<span id="cb42-19"><a href="#cb42-19"></a></span>
+<span id="cb42-20"><a href="#cb42-20"></a>SELECT DurationSeconds,</span>
+<span id="cb42-21"><a href="#cb42-21"></a>ROUND(DurationSeconds, -1) AS RoundToTen,</span>
+<span id="cb42-22"><a href="#cb42-22"></a>ROUND(DurationSeconds, -2) AS RoundToHundred</span>
+<span id="cb42-23"><a href="#cb42-23"></a>FROM Incidents</span>
+<span id="cb42-24"><a href="#cb42-24"></a></span>
+<span id="cb42-25"><a href="#cb42-25"></a></span>
+<span id="cb42-26"><a href="#cb42-26"></a>SELECT Profit,</span>
+<span id="cb42-27"><a href="#cb42-27"></a>ROUND(DurationSeconds, 0) AS RoundingtoWhole,</span>
+<span id="cb42-28"><a href="#cb42-28"></a>ROUND(DurationSeconds, 0, 1) AS Truncating</span>
+<span id="cb42-29"><a href="#cb42-29"></a>FROM Incidents</span>
+<span id="cb42-30"><a href="#cb42-30"></a></span>
+<span id="cb42-31"><a href="#cb42-31"></a></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</section>
+<section id="joins" class="slide level2">
+<h2>JOINS</h2>
+<div class="sourceCode" id="cb43"><pre class="sourceCode numberSource {sql} number-lines code-with-copy"><code class="sourceCode"><span id="cb43-1"><a href="#cb43-1"></a></span>
+<span id="cb43-2"><a href="#cb43-2"></a></span>
+<span id="cb43-3"><a href="#cb43-3"></a>SELECT p1.country, prime_minister, president</span>
+<span id="cb43-4"><a href="#cb43-4"></a>FROM prime_ministers AS p1</span>
+<span id="cb43-5"><a href="#cb43-5"></a>LEFT JOIN presidents AS p2</span>
+<span id="cb43-6"><a href="#cb43-6"></a>ON p1.country = p2.country;</span>
+<span id="cb43-7"><a href="#cb43-7"></a></span>
+<span id="cb43-8"><a href="#cb43-8"></a></span>
+<span id="cb43-9"><a href="#cb43-9"></a>SELECT p1.country AS pm_co, p2.country AS pres_co,</span>
+<span id="cb43-10"><a href="#cb43-10"></a>  prime_minister, president</span>
+<span id="cb43-11"><a href="#cb43-11"></a>FROM prime_ministers AS p1</span>
+<span id="cb43-12"><a href="#cb43-12"></a>FULL JOIN presidents AS p2</span>
+<span id="cb43-13"><a href="#cb43-13"></a>ON p1.country = p2.country;</span>
+<span id="cb43-14"><a href="#cb43-14"></a></span>
+<span id="cb43-15"><a href="#cb43-15"></a></span>
+<span id="cb43-16"><a href="#cb43-16"></a>SELECT prime_minister, president</span>
+<span id="cb43-17"><a href="#cb43-17"></a>FROM prime_ministers AS p1</span>
+<span id="cb43-18"><a href="#cb43-18"></a>CROSS JOIN presidents AS p2</span>
+<span id="cb43-19"><a href="#cb43-19"></a>WHERE p1.continent IN ('North America', 'Oceania');</span>
+<span id="cb43-20"><a href="#cb43-20"></a></span>
+<span id="cb43-21"><a href="#cb43-21"></a></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</section>
+<section id="unions" class="slide level2">
+<h2>UNIONS</h2>
+<div class="sourceCode" id="cb44"><pre class="sourceCode numberSource {sql} number-lines code-with-copy"><code class="sourceCode"><span id="cb44-1"><a href="#cb44-1"></a></span>
+<span id="cb44-2"><a href="#cb44-2"></a></span>
+<span id="cb44-3"><a href="#cb44-3"></a>SELECT prime_minister AS leader, country</span>
+<span id="cb44-4"><a href="#cb44-4"></a>FROM prime_ministers</span>
+<span id="cb44-5"><a href="#cb44-5"></a>UNION</span>
+<span id="cb44-6"><a href="#cb44-6"></a>SELECT monarch, country</span>
+<span id="cb44-7"><a href="#cb44-7"></a>FROM monarchs</span>
+<span id="cb44-8"><a href="#cb44-8"></a>ORDER BY country;</span>
+<span id="cb44-9"><a href="#cb44-9"></a></span>
+<span id="cb44-10"><a href="#cb44-10"></a></span>
+<span id="cb44-11"><a href="#cb44-11"></a>SELECT prime_minister AS leader, country</span>
+<span id="cb44-12"><a href="#cb44-12"></a>FROM prime_ministers</span>
+<span id="cb44-13"><a href="#cb44-13"></a>UNION ALL</span>
+<span id="cb44-14"><a href="#cb44-14"></a>SELECT monarch, country</span>
+<span id="cb44-15"><a href="#cb44-15"></a>FROM monarchs</span>
+<span id="cb44-16"><a href="#cb44-16"></a>ORDER BY country</span>
+<span id="cb44-17"><a href="#cb44-17"></a>LIMIT 10;</span>
+<span id="cb44-18"><a href="#cb44-18"></a></span>
+<span id="cb44-19"><a href="#cb44-19"></a></span>
+<span id="cb44-20"><a href="#cb44-20"></a>SELECT country</span>
+<span id="cb44-21"><a href="#cb44-21"></a>FROM prime_ministers</span>
+<span id="cb44-22"><a href="#cb44-22"></a>INTERSECT</span>
+<span id="cb44-23"><a href="#cb44-23"></a>SELECT country</span>
+<span id="cb44-24"><a href="#cb44-24"></a>FROM presidents;</span>
+<span id="cb44-25"><a href="#cb44-25"></a></span>
+<span id="cb44-26"><a href="#cb44-26"></a></span>
+<span id="cb44-27"><a href="#cb44-27"></a>--Monarchs that aren't prime ministers</span>
+<span id="cb44-28"><a href="#cb44-28"></a></span>
+<span id="cb44-29"><a href="#cb44-29"></a>SELECT monarch, country</span>
+<span id="cb44-30"><a href="#cb44-30"></a>FROM monarchs</span>
+<span id="cb44-31"><a href="#cb44-31"></a>EXCEPT</span>
+<span id="cb44-32"><a href="#cb44-32"></a>SELECT prime_minister, country</span>
+<span id="cb44-33"><a href="#cb44-33"></a>FROM prime_ministers;</span>
+<span id="cb44-34"><a href="#cb44-34"></a></span>
+<span id="cb44-35"><a href="#cb44-35"></a></span>
+<span id="cb44-36"><a href="#cb44-36"></a>-- Sub Queries</span>
+<span id="cb44-37"><a href="#cb44-37"></a></span>
+<span id="cb44-38"><a href="#cb44-38"></a>-- Semi JOin</span>
+<span id="cb44-39"><a href="#cb44-39"></a></span>
+<span id="cb44-40"><a href="#cb44-40"></a>SELECT president, country, continent</span>
+<span id="cb44-41"><a href="#cb44-41"></a>FROM presidents</span>
+<span id="cb44-42"><a href="#cb44-42"></a>WHERE country IN</span>
+<span id="cb44-43"><a href="#cb44-43"></a>(SELECT name</span>
+<span id="cb44-44"><a href="#cb44-44"></a>  FROM states</span>
+<span id="cb44-45"><a href="#cb44-45"></a>  WHERE indep_year &lt; 1800);</span>
+<span id="cb44-46"><a href="#cb44-46"></a></span>
+<span id="cb44-47"><a href="#cb44-47"></a>-- Anti Join</span>
+<span id="cb44-48"><a href="#cb44-48"></a></span>
+<span id="cb44-49"><a href="#cb44-49"></a>SELECT president, country, continent</span>
+<span id="cb44-50"><a href="#cb44-50"></a>FROM presidents</span>
+<span id="cb44-51"><a href="#cb44-51"></a>WHERE continent LIKE '%America'</span>
+<span id="cb44-52"><a href="#cb44-52"></a>AND country NOT IN</span>
+<span id="cb44-53"><a href="#cb44-53"></a>(SELECT name</span>
+<span id="cb44-54"><a href="#cb44-54"></a>  FROM states</span>
+<span id="cb44-55"><a href="#cb44-55"></a>  WHERE indep_year &lt; 1800);</span>
+<span id="cb44-56"><a href="#cb44-56"></a>  </span>
+<span id="cb44-57"><a href="#cb44-57"></a>  </span>
+<span id="cb44-58"><a href="#cb44-58"></a>SELECT DISTINCT monarchs.continent, subquery.max_perc</span>
+<span id="cb44-59"><a href="#cb44-59"></a>FROM monarchs,</span>
+<span id="cb44-60"><a href="#cb44-60"></a>(SELECT continent, MAX(women_parli_perc) AS max_perc</span>
+<span id="cb44-61"><a href="#cb44-61"></a>  FROM states</span>
+<span id="cb44-62"><a href="#cb44-62"></a>  GROUP BY continent) AS subquery</span>
+<span id="cb44-63"><a href="#cb44-63"></a>WHERE monarchs.continent = subquery.continent</span>
+<span id="cb44-64"><a href="#cb44-64"></a>ORDER BY continent;</span>
+<span id="cb44-65"><a href="#cb44-65"></a></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</section>
+<section id="missing" class="slide level2">
+<h2>MISSING</h2>
+<div class="sourceCode" id="cb45"><pre class="sourceCode numberSource {sql} number-lines code-with-copy"><code class="sourceCode"><span id="cb45-1"><a href="#cb45-1"></a></span>
+<span id="cb45-2"><a href="#cb45-2"></a>-- Returning No NULL</span>
+<span id="cb45-3"><a href="#cb45-3"></a></span>
+<span id="cb45-4"><a href="#cb45-4"></a>SELECT Country, InternetUse, Year</span>
+<span id="cb45-5"><a href="#cb45-5"></a>FROM EconomicIndicators</span>
+<span id="cb45-6"><a href="#cb45-6"></a>WHERE InternetUse IS NOT NULL</span>
+<span id="cb45-7"><a href="#cb45-7"></a></span>
+<span id="cb45-8"><a href="#cb45-8"></a>-- Detecting NULLs</span>
+<span id="cb45-9"><a href="#cb45-9"></a></span>
+<span id="cb45-10"><a href="#cb45-10"></a>SELECT Country, InternetUse, Year</span>
+<span id="cb45-11"><a href="#cb45-11"></a>FROM EconomicIndicators</span>
+<span id="cb45-12"><a href="#cb45-12"></a>WHERE InternetUse IS NULL</span>
+<span id="cb45-13"><a href="#cb45-13"></a></span>
+<span id="cb45-14"><a href="#cb45-14"></a></span>
+<span id="cb45-15"><a href="#cb45-15"></a>--  Substituting missing data with a specific using ISNULL</span>
+<span id="cb45-16"><a href="#cb45-16"></a></span>
+<span id="cb45-17"><a href="#cb45-17"></a>SELECT GDP, Country,</span>
+<span id="cb45-18"><a href="#cb45-18"></a>ISNULL(Country, 'Unknown') AS NewCountry</span>
+<span id="cb45-19"><a href="#cb45-19"></a>FROM EconomicIndicators</span>
+<span id="cb45-20"><a href="#cb45-20"></a></span>
+<span id="cb45-21"><a href="#cb45-21"></a></span>
+<span id="cb45-22"><a href="#cb45-22"></a>/*Substituting values from one column for another with ISNULL*/</span>
+<span id="cb45-23"><a href="#cb45-23"></a>SELECT TradeGDPPercent, ImportGoodPercent,</span>
+<span id="cb45-24"><a href="#cb45-24"></a>ISNULL(TradeGDPPercent, ImportGoodPercent) AS NewPercent</span>
+<span id="cb45-25"><a href="#cb45-25"></a>FROM EconomicIndicators</span>
+<span id="cb45-26"><a href="#cb45-26"></a></span>
+<span id="cb45-27"><a href="#cb45-27"></a></span>
+<span id="cb45-28"><a href="#cb45-28"></a>-- We are binning the data here into discrete groups</span>
+<span id="cb45-29"><a href="#cb45-29"></a>SELECT Country, LifeExp,</span>
+<span id="cb45-30"><a href="#cb45-30"></a>CASE WHEN LifeExp &lt; 30 THEN 1</span>
+<span id="cb45-31"><a href="#cb45-31"></a>  WHEN LifeExp &gt; 29 AND LifeExp &lt; 40 THEN 2</span>
+<span id="cb45-32"><a href="#cb45-32"></a>  WHEN LifeExp &gt; 39 AND LifeExp &lt; 50 THEN 3</span>
+<span id="cb45-33"><a href="#cb45-33"></a>  WHEN LifeExp &gt; 49 AND LifeExp &lt; 60 THEN 4</span>
+<span id="cb45-34"><a href="#cb45-34"></a>  ELSE 5</span>
+<span id="cb45-35"><a href="#cb45-35"></a>  END AS LifeExpGroup</span>
+<span id="cb45-36"><a href="#cb45-36"></a>FROM EconomicIndicators</span>
+<span id="cb45-37"><a href="#cb45-37"></a>WHERE Year = 2007</span>
+<span id="cb45-38"><a href="#cb45-38"></a></span>
+<span id="cb45-39"><a href="#cb45-39"></a></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</section>
+<section id="derived-tables-cte" class="slide level2">
+<h2>DERIVED TABLES &amp; CTE</h2>
+<p>What are Derived tables? - Query which is treated like a temporary table - Always contained within the main query - They are specified in the <code>FROM</code> clause - Can contain intermediate calculations to be used the main query or different joins than in the main query</p>
+<div class="sourceCode" id="cb46"><pre class="sourceCode numberSource {sql} number-lines code-with-copy"><code class="sourceCode"><span id="cb46-1"><a href="#cb46-1"></a>SELECT a.* FROM Kidney a</span>
+<span id="cb46-2"><a href="#cb46-2"></a>-- This derived table computes the Average age joined to the actual table</span>
+<span id="cb46-3"><a href="#cb46-3"></a>JOIN (SELECT AVG(Age) AS AverageAge</span>
+<span id="cb46-4"><a href="#cb46-4"></a>FROM Kidney) b</span>
+<span id="cb46-5"><a href="#cb46-5"></a>ON a.Age = b.AverageAge</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<p><strong>Common Table Expressions (CTE)</strong></p>
+<div class="sourceCode" id="cb47"><pre class="sourceCode numberSource {sql} number-lines code-with-copy"><code class="sourceCode"><span id="cb47-1"><a href="#cb47-1"></a></span>
+<span id="cb47-2"><a href="#cb47-2"></a>-- CTE definitions start with the keyword WITH</span>
+<span id="cb47-3"><a href="#cb47-3"></a>-- Followed by the CTE names and the columns it contains</span>
+<span id="cb47-4"><a href="#cb47-4"></a>WITH CTEName (Col1, Col2)</span>
+<span id="cb47-5"><a href="#cb47-5"></a>AS</span>
+<span id="cb47-6"><a href="#cb47-6"></a>-- Define the CTE query</span>
+<span id="cb47-7"><a href="#cb47-7"></a>(</span>
+<span id="cb47-8"><a href="#cb47-8"></a>-- The two columns from the definition above</span>
+<span id="cb47-9"><a href="#cb47-9"></a>  SELECT Col1, Col2</span>
+<span id="cb47-10"><a href="#cb47-10"></a>  FROM TableName</span>
+<span id="cb47-11"><a href="#cb47-11"></a>)</span>
+<span id="cb47-12"><a href="#cb47-12"></a></span>
+<span id="cb47-13"><a href="#cb47-13"></a></span>
+<span id="cb47-14"><a href="#cb47-14"></a></span>
+<span id="cb47-15"><a href="#cb47-15"></a>-- Create a CTE to get the Maximum BloodPressure by Age</span>
+<span id="cb47-16"><a href="#cb47-16"></a>WITH BloodPressureAge(Age, MaxBloodPressure)</span>
+<span id="cb47-17"><a href="#cb47-17"></a>AS</span>
+<span id="cb47-18"><a href="#cb47-18"></a>  (SELECT Age, MAX(BloodPressure) AS MaxBloodPressure</span>
+<span id="cb47-19"><a href="#cb47-19"></a>  FROM Kidney</span>
+<span id="cb47-20"><a href="#cb47-20"></a>  GROUP BY Age)</span>
+<span id="cb47-21"><a href="#cb47-21"></a>  </span>
+<span id="cb47-22"><a href="#cb47-22"></a>-- Create a query to use the CTE as a table</span>
+<span id="cb47-23"><a href="#cb47-23"></a>SELECT a.Age, MIN(a.BloodPressure), b.MaxBloodPressure</span>
+<span id="cb47-24"><a href="#cb47-24"></a>FROM Kidney a</span>
+<span id="cb47-25"><a href="#cb47-25"></a>-- Join the CTE with the table</span>
+<span id="cb47-26"><a href="#cb47-26"></a>JOIN BloodpressureAge b</span>
+<span id="cb47-27"><a href="#cb47-27"></a>  ON a.Age = b.Age</span>
+<span id="cb47-28"><a href="#cb47-28"></a>GROUP BY a.Age, b.MaxBloodPressure</span>
+<span id="cb47-29"><a href="#cb47-29"></a></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</section>
+<section id="windows-function" class="slide level2">
+<h2>Windows Function</h2>
+<p><strong>SUM</strong></p>
+<div class="sourceCode" id="cb48"><pre class="sourceCode numberSource {sql} number-lines code-with-copy"><code class="sourceCode"><span id="cb48-1"><a href="#cb48-1"></a></span>
+<span id="cb48-2"><a href="#cb48-2"></a></span>
+<span id="cb48-3"><a href="#cb48-3"></a>SELECT SalesPerson, SalesYear, CurrentQuota,</span>
+<span id="cb48-4"><a href="#cb48-4"></a>  SUM(CurrentQuota)</span>
+<span id="cb48-5"><a href="#cb48-5"></a>  OVER (PARTITION BY SalesYear) AS YearlyTotal,</span>
+<span id="cb48-6"><a href="#cb48-6"></a>  ModifiedDate AS ModDate</span>
+<span id="cb48-7"><a href="#cb48-7"></a>FROM SaleGoal</span>
+<span id="cb48-8"><a href="#cb48-8"></a></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<p><strong>COUNT</strong></p>
+<div class="sourceCode" id="cb49"><pre class="sourceCode numberSource {sql} number-lines code-with-copy"><code class="sourceCode"><span id="cb49-1"><a href="#cb49-1"></a></span>
+<span id="cb49-2"><a href="#cb49-2"></a>SELECT SalesPerson, SalesYear, CurrentQuota,</span>
+<span id="cb49-3"><a href="#cb49-3"></a>  COUNT(CurrentQuota)</span>
+<span id="cb49-4"><a href="#cb49-4"></a>  OVER (PARTITION BY SalesYear) AS QuotaPerYear,</span>
+<span id="cb49-5"><a href="#cb49-5"></a>  ModifiedDate AS ModDate</span>
+<span id="cb49-6"><a href="#cb49-6"></a>FROM SaleGoal</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<p><strong>FIRST_VALUE() and LAST_VALUE()</strong></p>
+<div class="sourceCode" id="cb50"><pre class="sourceCode numberSource {sql} number-lines code-with-copy"><code class="sourceCode"><span id="cb50-1"><a href="#cb50-1"></a></span>
+<span id="cb50-2"><a href="#cb50-2"></a>-- Select the columns</span>
+<span id="cb50-3"><a href="#cb50-3"></a>SELECT SalesPerson, SalesYear, CurrentQuota,</span>
+<span id="cb50-4"><a href="#cb50-4"></a>  -- First value from every window</span>
+<span id="cb50-5"><a href="#cb50-5"></a>  FIRST_VALUE(CurrentQuota)</span>
+<span id="cb50-6"><a href="#cb50-6"></a>  OVER (PARTITION BY SalesYear ORDER BY ModifiedDate) AS StartQuota,</span>
+<span id="cb50-7"><a href="#cb50-7"></a>-- Last value from every window</span>
+<span id="cb50-8"><a href="#cb50-8"></a>  LAST_VALUE(CurrentQuota)</span>
+<span id="cb50-9"><a href="#cb50-9"></a>  OVER (PARTITION BY SalesYear ORDER BY ModifiedDate) AS EndQuota,</span>
+<span id="cb50-10"><a href="#cb50-10"></a>  ModifiedDate as ModDate</span>
+<span id="cb50-11"><a href="#cb50-11"></a>FROM SaleGoal</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<p><strong>ROW_NUMBER()</strong></p>
+<div class="sourceCode" id="cb51"><pre class="sourceCode numberSource {sql} number-lines code-with-copy"><code class="sourceCode"><span id="cb51-1"><a href="#cb51-1"></a>SELECT SalesPerson, SalesYear, CurrentQuota,</span>
+<span id="cb51-2"><a href="#cb51-2"></a>  ROW_NUMBER()</span>
+<span id="cb51-3"><a href="#cb51-3"></a>  OVER (PARTITION BY SalesPerson ORDER BY SalesYear) AS QuotabySalesPerson</span>
+<span id="cb51-4"><a href="#cb51-4"></a>FROM SaleGoal</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<p><strong>Calculating the mode</strong></p>
+<div class="sourceCode" id="cb52"><pre class="sourceCode numberSource {sql} number-lines code-with-copy"><code class="sourceCode"><span id="cb52-1"><a href="#cb52-1"></a></span>
+<span id="cb52-2"><a href="#cb52-2"></a>WITH QuotaCount AS (</span>
+<span id="cb52-3"><a href="#cb52-3"></a>SELECT SalesPerson, SalesYear, CurrentQuota,</span>
+<span id="cb52-4"><a href="#cb52-4"></a>  ROW_NUMBER()</span>
+<span id="cb52-5"><a href="#cb52-5"></a>  OVER (PARTITION BY CurrentQuota ORDER BY CurrentQuota) AS QuotaList</span>
+<span id="cb52-6"><a href="#cb52-6"></a>FROM SaleGoal</span>
+<span id="cb52-7"><a href="#cb52-7"></a>)</span>
+<span id="cb52-8"><a href="#cb52-8"></a></span>
+<span id="cb52-9"><a href="#cb52-9"></a>SELECT CurrentQuota, QuotaList AS Mode</span>
+<span id="cb52-10"><a href="#cb52-10"></a>FROM QuotaCount</span>
+<span id="cb52-11"><a href="#cb52-11"></a>WHERE QuotaList IN (SELECT MAX(QuotaList) FROM QuotaCount)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</section>
+</section>
 
-</section>
     </div>
   </div>
 

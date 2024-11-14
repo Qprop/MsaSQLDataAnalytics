@@ -506,8 +506,385 @@ SELECT * FROM pg_catalog.pg_tables
 
 ```
 
+
+## SQL EDA Samples
+
+```{sql}
+-- CONVERT Syntax:
+CONVERT ( data_type [ ( length ) ] , expression [ , style ] )
+-- Returns expression based on data_type
+
+-- DATEPART Syntax
+DATEPART ( datepart , date )
+-- Returns int
+
+-- DATENAME Syntax
+DATENAME ( datepart , date )
+-- Returns nvarchar
+
+-- DATEDIFF Syntax
+DATEDIFF ( datepart , startdate , enddate )
+-- Returns int; can't use datepart weekday value
+-- datepart values = year, quarter, month, dayofyear, day, week, weekday, hour,
+-- minute, second, microsecond, nanosecond
+
+---Sample---
+-- CONVERT
+SELECT
+TOP 1 PickupDate,
+CONVERT (DATE, PickupDate) AS DateOnly
+FROM YellowTripData
+
+
+-- CAST syntax
+CAST ( expression AS data_type [ ( length ) ] )
+-- Returns expression based on data_type
+
+
+SELECT DISTINCT
+CAST(PickupDate as date),
+CAST(DropOffDate as date)
+FROM YellowTripData;
+
+
+SELECT GETDATE()
+
+
+-- Yesterday
+SELECT DATEADD(d, -1, GETDATE())
+
+
+-- Yesterday's Taxi Passenger Count
+SELECT SUM(PassengerCount)
+FROM YellowTripData
+WHERE CAST(PickupDate as date) = DATEADD(d, -1, GETDATE())
+
+
+SELECT DATEDIFF(day, '2/27/2019', '2/28/2019')
+SELECT DATEDIFF(year, '12/31/2017', '1/1/2019')
+
+SELECT DATEADD(DD, 30, '2020-06-21')
+
+SELECT DATEDIFF(DD, '2020-05-22', '2020-06-21') AS Difference1,
+DATEDIFF(DD, '2020-07-21', '2020-06-21') AS Difference2
+
+
+```
+
+## SQL EDA CONTINUATION
+
+```{sql}
+
+--IF ELSE Equivalent
+
+SELECT name, continent, indep_year,
+  CASE WHEN indep_year < 1900 THEN 'before 1900'
+    WHEN indep_year <= 1930 THEN 'between 1900 and 1930'
+    ELSE 'after 1930' END
+    AS indep_year_group
+FROM states
+ORDER BY indep_year_group;
+
+
+
+SELECT DurationSeconds,
+  ROUND(DurationSeconds, 0) AS RoundToZero,
+  ROUND(DurationSeconds, 1) AS RoundToOne
+FROM Incidents
+
+
+SELECT DurationSeconds,
+ROUND(DurationSeconds, -1) AS RoundToTen,
+ROUND(DurationSeconds, -2) AS RoundToHundred
+FROM Incidents
+
+
+SELECT Profit,
+ROUND(DurationSeconds, 0) AS RoundingtoWhole,
+ROUND(DurationSeconds, 0, 1) AS Truncating
+FROM Incidents
+
+
+
+```
+
+
+## JOINS
+
+```{sql}
+
+
+SELECT p1.country, prime_minister, president
+FROM prime_ministers AS p1
+LEFT JOIN presidents AS p2
+ON p1.country = p2.country;
+
+
+SELECT p1.country AS pm_co, p2.country AS pres_co,
+  prime_minister, president
+FROM prime_ministers AS p1
+FULL JOIN presidents AS p2
+ON p1.country = p2.country;
+
+
+SELECT prime_minister, president
+FROM prime_ministers AS p1
+CROSS JOIN presidents AS p2
+WHERE p1.continent IN ('North America', 'Oceania');
+
+
+
+```
+
+## UNIONS
+
+```{sql}
+
+
+SELECT prime_minister AS leader, country
+FROM prime_ministers
+UNION
+SELECT monarch, country
+FROM monarchs
+ORDER BY country;
+
+
+SELECT prime_minister AS leader, country
+FROM prime_ministers
+UNION ALL
+SELECT monarch, country
+FROM monarchs
+ORDER BY country
+LIMIT 10;
+
+
+SELECT country
+FROM prime_ministers
+INTERSECT
+SELECT country
+FROM presidents;
+
+
+--Monarchs that aren't prime ministers
+
+SELECT monarch, country
+FROM monarchs
+EXCEPT
+SELECT prime_minister, country
+FROM prime_ministers;
+
+
+-- Sub Queries
+
+-- Semi JOin
+
+SELECT president, country, continent
+FROM presidents
+WHERE country IN
+(SELECT name
+  FROM states
+  WHERE indep_year < 1800);
+
+-- Anti Join
+
+SELECT president, country, continent
+FROM presidents
+WHERE continent LIKE '%America'
+AND country NOT IN
+(SELECT name
+  FROM states
+  WHERE indep_year < 1800);
+  
+  
+SELECT DISTINCT monarchs.continent, subquery.max_perc
+FROM monarchs,
+(SELECT continent, MAX(women_parli_perc) AS max_perc
+  FROM states
+  GROUP BY continent) AS subquery
+WHERE monarchs.continent = subquery.continent
+ORDER BY continent;
+
+
+```
+
+
+## MISSING
+
+```{sql}
+
+-- Returning No NULL
+
+SELECT Country, InternetUse, Year
+FROM EconomicIndicators
+WHERE InternetUse IS NOT NULL
+
+-- Detecting NULLs
+
+SELECT Country, InternetUse, Year
+FROM EconomicIndicators
+WHERE InternetUse IS NULL
+
+
+--  Substituting missing data with a specific using ISNULL
+
+SELECT GDP, Country,
+ISNULL(Country, 'Unknown') AS NewCountry
+FROM EconomicIndicators
+
+
+/*Substituting values from one column for another with ISNULL*/
+SELECT TradeGDPPercent, ImportGoodPercent,
+ISNULL(TradeGDPPercent, ImportGoodPercent) AS NewPercent
+FROM EconomicIndicators
+
+
+-- We are binning the data here into discrete groups
+SELECT Country, LifeExp,
+CASE WHEN LifeExp < 30 THEN 1
+  WHEN LifeExp > 29 AND LifeExp < 40 THEN 2
+  WHEN LifeExp > 39 AND LifeExp < 50 THEN 3
+  WHEN LifeExp > 49 AND LifeExp < 60 THEN 4
+  ELSE 5
+  END AS LifeExpGroup
+FROM EconomicIndicators
+WHERE Year = 2007
+
+
+
+```
+
+## DERIVED TABLES & CTE
+
+What are Derived tables?
+- Query which is treated like a temporary table
+- Always contained within the main query
+- They are specified in the `FROM` clause
+- Can contain intermediate calculations to be used the main query or different joins than in the main query
+
+
+```{sql}
+SELECT a.* FROM Kidney a
+-- This derived table computes the Average age joined to the actual table
+JOIN (SELECT AVG(Age) AS AverageAge
+FROM Kidney) b
+ON a.Age = b.AverageAge
+
+```
+
+
+**Common Table Expressions (CTE)**
+
+```{sql}
+
+-- CTE definitions start with the keyword WITH
+-- Followed by the CTE names and the columns it contains
+WITH CTEName (Col1, Col2)
+AS
+-- Define the CTE query
+(
+-- The two columns from the definition above
+  SELECT Col1, Col2
+  FROM TableName
+)
+
+
+
+-- Create a CTE to get the Maximum BloodPressure by Age
+WITH BloodPressureAge(Age, MaxBloodPressure)
+AS
+  (SELECT Age, MAX(BloodPressure) AS MaxBloodPressure
+  FROM Kidney
+  GROUP BY Age)
+  
+-- Create a query to use the CTE as a table
+SELECT a.Age, MIN(a.BloodPressure), b.MaxBloodPressure
+FROM Kidney a
+-- Join the CTE with the table
+JOIN BloodpressureAge b
+  ON a.Age = b.Age
+GROUP BY a.Age, b.MaxBloodPressure
+
+
+```
+
+
+## Windows Function 
+
+**SUM**
+
+```{sql}
+
+
+SELECT SalesPerson, SalesYear, CurrentQuota,
+  SUM(CurrentQuota)
+  OVER (PARTITION BY SalesYear) AS YearlyTotal,
+  ModifiedDate AS ModDate
+FROM SaleGoal
+
+
+```
+
+
+**COUNT**
+
+```{sql}
+
+SELECT SalesPerson, SalesYear, CurrentQuota,
+  COUNT(CurrentQuota)
+  OVER (PARTITION BY SalesYear) AS QuotaPerYear,
+  ModifiedDate AS ModDate
+FROM SaleGoal
+
+```
+
+
+**FIRST_VALUE() and LAST_VALUE()**
+
+
+```{sql}
+
+-- Select the columns
+SELECT SalesPerson, SalesYear, CurrentQuota,
+  -- First value from every window
+  FIRST_VALUE(CurrentQuota)
+  OVER (PARTITION BY SalesYear ORDER BY ModifiedDate) AS StartQuota,
+-- Last value from every window
+  LAST_VALUE(CurrentQuota)
+  OVER (PARTITION BY SalesYear ORDER BY ModifiedDate) AS EndQuota,
+  ModifiedDate as ModDate
+FROM SaleGoal
+```
+
+**ROW_NUMBER()**
+
+```{sql}
+SELECT SalesPerson, SalesYear, CurrentQuota,
+  ROW_NUMBER()
+  OVER (PARTITION BY SalesPerson ORDER BY SalesYear) AS QuotabySalesPerson
+FROM SaleGoal
+```
+
+
+**Calculating the mode**
+
+```{sql}
+
+WITH QuotaCount AS (
+SELECT SalesPerson, SalesYear, CurrentQuota,
+  ROW_NUMBER()
+  OVER (PARTITION BY CurrentQuota ORDER BY CurrentQuota) AS QuotaList
+FROM SaleGoal
+)
+
+SELECT CurrentQuota, QuotaList AS Mode
+FROM QuotaCount
+WHERE QuotaList IN (SELECT MAX(QuotaList) FROM QuotaCount)
+
+```
+
+
 ## Folder Structure & File Management {visibility="hidden"}
 
 # SQL {visibility="hidden"}
 
-## SQL Introduction {.smaller} {visibility="hidden"}
+

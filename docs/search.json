@@ -49,52 +49,52 @@
     "text": "PostgreSQL-Specific Syntax\nNot all code works in every dialect of SQL. The following examples work in PostgreSQL, but are not guaranteed to work in other dialects.\nLimit the number of rows returned, offset from the top with LIMIT m OFFSET n\n\nSELECT *\n    FROM cars\nLIMIT 2 OFFSET 3\nPostgreSQL allows text concatenation with the || operator\n\nSELECT make || ' ' || model AS make_and_model\n    FROM cars\n    \nGet the current date with CURRENT_DATE and the current datetime with NOW() or CURRENT_TIME\n\nSELECT NOW(), CURRENT_DATE, CURRENT_TIME\nList available tables by selecting from pg_catalog.pg_tables\n\nSELECT * FROM pg_catalog.pg_tables"
   },
   {
-    "objectID": "MsaSQLDataAnalytics_backup.html#relationship-database-management-system-rdbms",
-    "href": "MsaSQLDataAnalytics_backup.html#relationship-database-management-system-rdbms",
+    "objectID": "MsaSQLDataAnalytics.html#sql-eda-samples",
+    "href": "MsaSQLDataAnalytics.html#sql-eda-samples",
     "title": "Data Analytics Introduction Using SQL Training",
-    "section": "Relationship Database Management System (RDBMS)",
-    "text": "Relationship Database Management System (RDBMS)\nTo be able to fully appreciate the use of databases and the relational nature, we access this through RDBMS. There are numerous RDBMS just to mention but a few;\n\nMS SQL\nMySQL\nPostgreSQL\nSQLite\ne.t.c."
+    "section": "SQL EDA Samples",
+    "text": "SQL EDA Samples\n-- CONVERT Syntax:\nCONVERT ( data_type [ ( length ) ] , expression [ , style ] )\n-- Returns expression based on data_type\n\n-- DATEPART Syntax\nDATEPART ( datepart , date )\n-- Returns int\n\n-- DATENAME Syntax\nDATENAME ( datepart , date )\n-- Returns nvarchar\n\n-- DATEDIFF Syntax\nDATEDIFF ( datepart , startdate , enddate )\n-- Returns int; can't use datepart weekday value\n-- datepart values = year, quarter, month, dayofyear, day, week, weekday, hour,\n-- minute, second, microsecond, nanosecond\n\n---Sample---\n-- CONVERT\nSELECT\nTOP 1 PickupDate,\nCONVERT (DATE, PickupDate) AS DateOnly\nFROM YellowTripData\n\n\n-- CAST syntax\nCAST ( expression AS data_type [ ( length ) ] )\n-- Returns expression based on data_type\n\n\nSELECT DISTINCT\nCAST(PickupDate as date),\nCAST(DropOffDate as date)\nFROM YellowTripData;\n\n\nSELECT GETDATE()\n\n\n-- Yesterday\nSELECT DATEADD(d, -1, GETDATE())\n\n\n-- Yesterday's Taxi Passenger Count\nSELECT SUM(PassengerCount)\nFROM YellowTripData\nWHERE CAST(PickupDate as date) = DATEADD(d, -1, GETDATE())\n\n\nSELECT DATEDIFF(day, '2/27/2019', '2/28/2019')\nSELECT DATEDIFF(year, '12/31/2017', '1/1/2019')\n\nSELECT DATEADD(DD, 30, '2020-06-21')\n\nSELECT DATEDIFF(DD, '2020-05-22', '2020-06-21') AS Difference1,\nDATEDIFF(DD, '2020-07-21', '2020-06-21') AS Difference2"
   },
   {
-    "objectID": "MsaSQLDataAnalytics_backup.html#sql-crud-create-read-update-delete",
-    "href": "MsaSQLDataAnalytics_backup.html#sql-crud-create-read-update-delete",
+    "objectID": "MsaSQLDataAnalytics.html#sql-eda-continuation",
+    "href": "MsaSQLDataAnalytics.html#sql-eda-continuation",
     "title": "Data Analytics Introduction Using SQL Training",
-    "section": "SQL CRUD (Create Read Update Delete)",
-    "text": "SQL CRUD (Create Read Update Delete)\nSQL main ideology is to be able to: - Create tables/Databases - Read tables/Databases - Update tables/Databases - Delete tables/Databases\nCreate\n\nCREATE TABLE table_name (\n column_name TYPE column_constraint,\n table_constraint table_constraint\n)\n\nInsert\nInserting records into a table\n\nINSERT INTO table(column1, column2, …)\nVALUES\n (value1, value2, …);\n\nUpdate\nUpdating a record in the table - The general structure of an update query in SQL looks like the following:\n\nUPDATE table\nSET column1 = value1,\n    column2 = value2 ,...\nWHERE\n condition;\n\nDelete\nDeleting a record in the table - The general structure of a delete query in SQL looks like following:\n\nDELETE FROM table\nWHERE condition;\n\nSample Create\n\nCREATE TABLE cars (\n\n\"make\" varchar(255),\n\"model\" varchar(255),\n\"year\" numeric(4,0),\n\"propulsion_type\" varchar(255),\n\"time_to_60_mph_s\" numeric(4,2),\n\"limited_production_count\" numeric(10,0)\n\n\n);"
+    "section": "SQL EDA CONTINUATION",
+    "text": "SQL EDA CONTINUATION\n\n--IF ELSE Equivalent\n\nSELECT name, continent, indep_year,\n  CASE WHEN indep_year &lt; 1900 THEN 'before 1900'\n    WHEN indep_year &lt;= 1930 THEN 'between 1900 and 1930'\n    ELSE 'after 1930' END\n    AS indep_year_group\nFROM states\nORDER BY indep_year_group;\n\n\n\nSELECT DurationSeconds,\n  ROUND(DurationSeconds, 0) AS RoundToZero,\n  ROUND(DurationSeconds, 1) AS RoundToOne\nFROM Incidents\n\n\nSELECT DurationSeconds,\nROUND(DurationSeconds, -1) AS RoundToTen,\nROUND(DurationSeconds, -2) AS RoundToHundred\nFROM Incidents\n\n\nSELECT Profit,\nROUND(DurationSeconds, 0) AS RoundingtoWhole,\nROUND(DurationSeconds, 0, 1) AS Truncating\nFROM Incidents"
   },
   {
-    "objectID": "MsaSQLDataAnalytics_backup.html#first-sql-syntax",
-    "href": "MsaSQLDataAnalytics_backup.html#first-sql-syntax",
+    "objectID": "MsaSQLDataAnalytics.html#joins",
+    "href": "MsaSQLDataAnalytics.html#joins",
     "title": "Data Analytics Introduction Using SQL Training",
-    "section": "First SQL syntax",
-    "text": "First SQL syntax\nSELECT\nPick all the columns\n\nSELECT *\n    FROM cars\n\nSelect one single column\n\nSELECT model\n    FROM cars\n    \nselect multiple columns\n\nSELECT make, model\n    FROM cars\n    \nOverride column names with SELECT col AS new_name\n\nSELECT make, model, propulsion_type AS engine_type\n    FROM cars\n    \nArrange the rows in ascending order of values in a column with ORDER BY col\n\nSELECT  make, model, time_to_60_mph_s\n    FROM cars\n    ORDER BY time_to_60_mph_s\n    \nLimit the number of rows returned with LIMIT n\n\nSELECT * \n    FROM cars\nLIMIT 2\nGet unique values with SELECT DISTINCT\n\nSELECT DISTINCT propulsion_type\n    FROM cars"
+    "section": "JOINS",
+    "text": "JOINS\n\n\nSELECT p1.country, prime_minister, president\nFROM prime_ministers AS p1\nLEFT JOIN presidents AS p2\nON p1.country = p2.country;\n\n\nSELECT p1.country AS pm_co, p2.country AS pres_co,\n  prime_minister, president\nFROM prime_ministers AS p1\nFULL JOIN presidents AS p2\nON p1.country = p2.country;\n\n\nSELECT prime_minister, president\nFROM prime_ministers AS p1\nCROSS JOIN presidents AS p2\nWHERE p1.continent IN ('North America', 'Oceania');"
   },
   {
-    "objectID": "MsaSQLDataAnalytics_backup.html#filtering-data",
-    "href": "MsaSQLDataAnalytics_backup.html#filtering-data",
+    "objectID": "MsaSQLDataAnalytics.html#unions",
+    "href": "MsaSQLDataAnalytics.html#unions",
     "title": "Data Analytics Introduction Using SQL Training",
-    "section": "Filtering Data",
-    "text": "Filtering Data\nGet rows where a number is greater than a value with WHERE col &gt; n\n\nSELECT make, model, time_to_60_mph_s\n    FROM cars\n    WHERE time_to_60_mph_s &gt; 2.1\nGet rows where a number is greater than or equal to a value with WHERE col &gt;= n\n\nSELECT make, model, time_to_60_mph_s\n    FROM cars\n    WHERE time_to_60_mph_s &gt;= 2.1\n\nGet rows where a number is less than a value with WHERE col &lt; n\n\nSELECT make, model, time_to_60_mph_s\n    FROM cars\n    WHERE time_to_60_mph_s &lt; 2.1\n\nGet rows where a number is less than or equal to a value with WHERE col &lt;= n\n\nSELECT make, model, time_to_60_mph_s\n    FROM cars\n    WHERE time_to_60_mph_s &lt;= 2.1\n\nGet rows where a number is equal to a value with WHERE col = n\n\nSELECT make, model, time_to_60_mph_s\n    FROM cars\n    WHERE time_to_60_mph_s = 2.1\n\nGet rows where a number is not equal to a value with WHERE col &lt;&gt; n or WHERE col != n\n\nSELECT make, model, time_to_60_mph_s\n    FROM cars\n    WHERE time_to_60_mph_s &lt;&gt; 2.1\n\n\nGet rows where a number is between two values (inclusive) with WHERE col BETWEEN m AND n\n\nSELECT make, model, time_to_60_mph_s\n    FROM cars\n    WHERE time_to_60_mph_s BETWEEN 1.9 AND 2.1"
+    "section": "UNIONS",
+    "text": "UNIONS\n\n\nSELECT prime_minister AS leader, country\nFROM prime_ministers\nUNION\nSELECT monarch, country\nFROM monarchs\nORDER BY country;\n\n\nSELECT prime_minister AS leader, country\nFROM prime_ministers\nUNION ALL\nSELECT monarch, country\nFROM monarchs\nORDER BY country\nLIMIT 10;\n\n\nSELECT country\nFROM prime_ministers\nINTERSECT\nSELECT country\nFROM presidents;\n\n\n--Monarchs that aren't prime ministers\n\nSELECT monarch, country\nFROM monarchs\nEXCEPT\nSELECT prime_minister, country\nFROM prime_ministers;\n\n\n-- Sub Queries\n\n-- Semi JOin\n\nSELECT president, country, continent\nFROM presidents\nWHERE country IN\n(SELECT name\n  FROM states\n  WHERE indep_year &lt; 1800);\n\n-- Anti Join\n\nSELECT president, country, continent\nFROM presidents\nWHERE continent LIKE '%America'\nAND country NOT IN\n(SELECT name\n  FROM states\n  WHERE indep_year &lt; 1800);\n  \n  \nSELECT DISTINCT monarchs.continent, subquery.max_perc\nFROM monarchs,\n(SELECT continent, MAX(women_parli_perc) AS max_perc\n  FROM states\n  GROUP BY continent) AS subquery\nWHERE monarchs.continent = subquery.continent\nORDER BY continent;"
   },
   {
-    "objectID": "MsaSQLDataAnalytics_backup.html#aggregating-data",
-    "href": "MsaSQLDataAnalytics_backup.html#aggregating-data",
+    "objectID": "MsaSQLDataAnalytics.html#missing",
+    "href": "MsaSQLDataAnalytics.html#missing",
     "title": "Data Analytics Introduction Using SQL Training",
-    "section": "Aggregating Data",
-    "text": "Aggregating Data\nSimple aggregations\nGet the total number of rows SELECT COUNT(*)\n\nSELECT COUNT(*)\n    FROM cars\nGet the total value of a column with SELECT SUM(col)\n\nSELECT SUM(limited_production_count)\n    FROM cars\nGet the mean value of a column with SELECT AVG(col)\n\nSELECT AVG(time_to_60_mph_s)\n    FROM cars\nGet the minimum value of a column with SELECT MIN(col)\n\nSELECT MIN(time_to_60_mph_s)\n    FROM cars\nGet the maximum value of a column with SELECT MAX(col)\n\nSELECT MAX(time_to_60_mph_s)\n    FROM cars"
+    "section": "MISSING",
+    "text": "MISSING\n\n-- Returning No NULL\n\nSELECT Country, InternetUse, Year\nFROM EconomicIndicators\nWHERE InternetUse IS NOT NULL\n\n-- Detecting NULLs\n\nSELECT Country, InternetUse, Year\nFROM EconomicIndicators\nWHERE InternetUse IS NULL\n\n\n--  Substituting missing data with a specific using ISNULL\n\nSELECT GDP, Country,\nISNULL(Country, 'Unknown') AS NewCountry\nFROM EconomicIndicators\n\n\n/*Substituting values from one column for another with ISNULL*/\nSELECT TradeGDPPercent, ImportGoodPercent,\nISNULL(TradeGDPPercent, ImportGoodPercent) AS NewPercent\nFROM EconomicIndicators\n\n\n-- We are binning the data here into discrete groups\nSELECT Country, LifeExp,\nCASE WHEN LifeExp &lt; 30 THEN 1\n  WHEN LifeExp &gt; 29 AND LifeExp &lt; 40 THEN 2\n  WHEN LifeExp &gt; 39 AND LifeExp &lt; 50 THEN 3\n  WHEN LifeExp &gt; 49 AND LifeExp &lt; 60 THEN 4\n  ELSE 5\n  END AS LifeExpGroup\nFROM EconomicIndicators\nWHERE Year = 2007"
   },
   {
-    "objectID": "MsaSQLDataAnalytics_backup.html#grouping-filtering-and-sorting",
-    "href": "MsaSQLDataAnalytics_backup.html#grouping-filtering-and-sorting",
+    "objectID": "MsaSQLDataAnalytics.html#derived-tables-cte",
+    "href": "MsaSQLDataAnalytics.html#derived-tables-cte",
     "title": "Data Analytics Introduction Using SQL Training",
-    "section": "Grouping, filtering, and sorting",
-    "text": "Grouping, filtering, and sorting\nGet summaries grouped by values with GROUP BY col\n\nSELECT propulsion_type, COUNT(*)\n    FROM cars\n    GROUP BY propulsion_type\nGet summaries grouped by values, in order of summaries with GROUP BY col ORDER BY smmry\n\nSELECT propulsion_type, AVG(time_to_60_mph_s) AS mean_time_to_60_mph_s\n    FROM cars\n    GROUP BY propulsion_type\n    ORDER BY mean_time_to_60_mph_s\nGet rows where values in a group meet a criterion with GROUP BY col HAVING condn\n\nSELECT propulsion_type, AVG(time_to_60_mph_s) AS mean_time_to_60_mph_s\n    FROM cars\n    GROUP BY propulsion_type\n    HAVING mean_time_to_60_mph_s &gt; 2\nFilter before and after grouping with WHERE condn_before GROUP BY col HAVING condn_after\n\nSELECT propulsion_type, AVG(time_to_60_mph_s) AS mean_time_to_60_mph_s\n    FROM cars\nWHERE limited_production_count IS NOT NULL\n    GROUP BY propulsion_type\n    HAVING mean_time_to_60_mph_s &gt; 2"
+    "section": "DERIVED TABLES & CTE",
+    "text": "DERIVED TABLES & CTE\nWhat are Derived tables? - Query which is treated like a temporary table - Always contained within the main query - They are specified in the FROM clause - Can contain intermediate calculations to be used the main query or different joins than in the main query\nSELECT a.* FROM Kidney a\n-- This derived table computes the Average age joined to the actual table\nJOIN (SELECT AVG(Age) AS AverageAge\nFROM Kidney) b\nON a.Age = b.AverageAge\nCommon Table Expressions (CTE)\n\n-- CTE definitions start with the keyword WITH\n-- Followed by the CTE names and the columns it contains\nWITH CTEName (Col1, Col2)\nAS\n-- Define the CTE query\n(\n-- The two columns from the definition above\n  SELECT Col1, Col2\n  FROM TableName\n)\n\n\n\n-- Create a CTE to get the Maximum BloodPressure by Age\nWITH BloodPressureAge(Age, MaxBloodPressure)\nAS\n  (SELECT Age, MAX(BloodPressure) AS MaxBloodPressure\n  FROM Kidney\n  GROUP BY Age)\n  \n-- Create a query to use the CTE as a table\nSELECT a.Age, MIN(a.BloodPressure), b.MaxBloodPressure\nFROM Kidney a\n-- Join the CTE with the table\nJOIN BloodpressureAge b\n  ON a.Age = b.Age\nGROUP BY a.Age, b.MaxBloodPressure"
   },
   {
-    "objectID": "MsaSQLDataAnalytics_backup.html#postgresql-specific-syntax",
-    "href": "MsaSQLDataAnalytics_backup.html#postgresql-specific-syntax",
+    "objectID": "MsaSQLDataAnalytics.html#windows-function",
+    "href": "MsaSQLDataAnalytics.html#windows-function",
     "title": "Data Analytics Introduction Using SQL Training",
-    "section": "PostgreSQL-Specific Syntax",
-    "text": "PostgreSQL-Specific Syntax\nNot all code works in every dialect of SQL. The following examples work in PostgreSQL, but are not guaranteed to work in other dialects.\nLimit the number of rows returned, offset from the top with LIMIT m OFFSET n\n\nSELECT *\n    FROM cars\nLIMIT 2 OFFSET 3\nPostgreSQL allows text concatenation with the || operator\n\nSELECT make || ' ' || model AS make_and_model\n    FROM cars\n    \nGet the current date with CURRENT_DATE and the current datetime with NOW() or CURRENT_TIME\n\nSELECT NOW(), CURRENT_DATE, CURRENT_TIME\nList available tables by selecting from pg_catalog.pg_tables\n\nSELECT * FROM pg_catalog.pg_tables"
+    "section": "Windows Function",
+    "text": "Windows Function\nSUM\n\n\nSELECT SalesPerson, SalesYear, CurrentQuota,\n  SUM(CurrentQuota)\n  OVER (PARTITION BY SalesYear) AS YearlyTotal,\n  ModifiedDate AS ModDate\nFROM SaleGoal\n\nCOUNT\n\nSELECT SalesPerson, SalesYear, CurrentQuota,\n  COUNT(CurrentQuota)\n  OVER (PARTITION BY SalesYear) AS QuotaPerYear,\n  ModifiedDate AS ModDate\nFROM SaleGoal\nFIRST_VALUE() and LAST_VALUE()\n\n-- Select the columns\nSELECT SalesPerson, SalesYear, CurrentQuota,\n  -- First value from every window\n  FIRST_VALUE(CurrentQuota)\n  OVER (PARTITION BY SalesYear ORDER BY ModifiedDate) AS StartQuota,\n-- Last value from every window\n  LAST_VALUE(CurrentQuota)\n  OVER (PARTITION BY SalesYear ORDER BY ModifiedDate) AS EndQuota,\n  ModifiedDate as ModDate\nFROM SaleGoal\nROW_NUMBER()\nSELECT SalesPerson, SalesYear, CurrentQuota,\n  ROW_NUMBER()\n  OVER (PARTITION BY SalesPerson ORDER BY SalesYear) AS QuotabySalesPerson\nFROM SaleGoal\nCalculating the mode\n\nWITH QuotaCount AS (\nSELECT SalesPerson, SalesYear, CurrentQuota,\n  ROW_NUMBER()\n  OVER (PARTITION BY CurrentQuota ORDER BY CurrentQuota) AS QuotaList\nFROM SaleGoal\n)\n\nSELECT CurrentQuota, QuotaList AS Mode\nFROM QuotaCount\nWHERE QuotaList IN (SELECT MAX(QuotaList) FROM QuotaCount)"
   }
 ]
